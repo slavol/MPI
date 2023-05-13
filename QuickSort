@@ -1,0 +1,46 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+void interschimbare(int& a, int& b) {
+    int temp = a;
+    a = b;
+    b = temp;
+}
+
+int partitie(int arr[], int stanga, int dreapta) {
+    int pivot = arr[dreapta];
+    int i = stanga - 1;
+    for (int j = stanga; j < dreapta; j++) {
+        if (arr[j] <= pivot) {
+            i++;
+            interschimbare(arr[i], arr[j]);
+        }
+    }
+    interschimbare(arr[i + 1], arr[dreapta]);
+    return i + 1;
+}
+
+void quickSort(int arr[], int stanga, int dreapta) {
+    if (stanga < dreapta) {
+        int pivotIndex = partitie(arr, stanga, dreapta);
+        quickSort(arr, stanga, pivotIndex - 1);
+        quickSort(arr, pivotIndex + 1, dreapta);
+    }
+}
+
+int main() {
+    int arr[100000],n;
+    ifstream fin("random_numbers50000.txt");
+     fin>>n;
+    for(int i=0;i<=n-1;i++)
+        fin>>arr[i];
+    quickSort(arr, 0, n - 1);
+    fin.close();
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
