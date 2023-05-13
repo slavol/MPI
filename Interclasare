@@ -1,0 +1,68 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+void interclasare(int sir[], int stanga, int mijloc, int dreapta) {
+    int dimensiuneStanga = mijloc - stanga + 1;
+    int dimensiuneDreapta = dreapta - mijloc;
+
+    int stangaSir[dimensiuneStanga], dreaptaSir[dimensiuneDreapta];
+
+    for (int i = 0; i < dimensiuneStanga; i++) {
+        stangaSir[i] = sir[stanga + i];
+    }
+    for (int j = 0; j < dimensiuneDreapta; j++) {
+        dreaptaSir[j] = sir[mijloc + 1 + j];
+    }
+
+    int i = 0, j = 0, k = stanga;
+    while (i < dimensiuneStanga && j < dimensiuneDreapta) {
+        if (stangaSir[i] <= dreaptaSir[j]) {
+            sir[k++] = stangaSir[i++];
+        } else {
+            sir[k++] = dreaptaSir[j++];
+        }
+    }
+
+    while (i < dimensiuneStanga) {
+        sir[k++] = stangaSir[i++];
+    }
+
+    while (j < dimensiuneDreapta) {
+        sir[k++] = dreaptaSir[j++];
+    }
+}
+
+void sortareInterclasare(int sir[], int stanga, int dreapta) {
+    if (stanga < dreapta) {
+        int mijloc = stanga + (dreapta - stanga) / 2;
+
+        sortareInterclasare(sir, stanga, mijloc);
+        sortareInterclasare(sir, mijloc + 1, dreapta);
+
+        interclasare(sir, stanga, mijloc, dreapta);
+    }
+}
+
+int main() {
+    int n;
+    ifstream fin("random_numbers50000
+                 .txt");
+    fin >> n;
+
+    int sir[n];
+
+    for (int i = 0; i < n; i++) {
+        fin >> sir[i];
+    }
+
+    sortareInterclasare(sir, 0, n - 1);
+    fin.close();
+    cout << "Sirul sortat este: ";
+    for (int i = 0; i < n; i++) {
+        cout << sir[i] << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
